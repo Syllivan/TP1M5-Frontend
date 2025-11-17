@@ -1,45 +1,34 @@
-/* main.js */
-
-
-// 1. On attend que la page HTML (le DOM) soit complètement chargée
-// Avant de tenter de manipuler le DOM, on s'assure qu'il existe.
+// ...existing code...
 document.addEventListener('DOMContentLoaded', () => {
    
-    // Message de vérification dans la console F12
     console.log('Le DOM est prêt. Lancement du fetch...');
 
-
-    // 2. On lance la requête (asynchrone) pour lire le fichier data.json
     fetch('./data.json')
-        .then(response => response.json()) // 3. On convertit la réponse en objet JSON
+        .then(response => response.json())
         .then(data => {
-            // 4. Cette partie s'exécute quand les données sont arrivées
             console.log('Données reçues :', data);
 
-
-            // 5. MISE À JOUR DU SERVEUR (SRV-01)
-            // On "attrape" la cible HTML (Voir explications sur le DOM)
-            // Note : 'statut-serveur-principal' doit correspondre à l'id du HTML
+            // MISE À JOUR DU SERVEUR (SRV-01)
             const serveurElement = document.getElementById('statut-serveur-principal');
-           
-            // On met à jour son contenu avec la donnée du JSON
-            // Note : data.srv01 correspond à la clé dans data.json
-            serveurElement.textContent = data.srv01;
+            const srvStatus = String(data.srv01 || '').trim();
 
+            if (serveurElement) {
+                serveurElement.textContent = srvStatus;
+                // Texte vert si 'En Ligne', rouge sinon (Éteinte ou autre)
+                if (srvStatus === 'En Ligne') {
+                    serveurElement.style.color = 'green';
+                } else {
+                    serveurElement.style.color = 'red';
+                }
+            }
 
-            // 6. MISE À JOUR DE LA CAMÉRA (CAM-01)
-            // On "attrape" l'autre cible
-            // Note : 'statut-camera-1' doit correspondre à l'id du HTML
+            // MISE À JOUR DE LA CAMÉRA (CAM-01)
             const cameraElement = document.getElementById('statut-camera-1');
-           
-            // On met à jour son contenu
-            // Note : data.cam01 correspond à la clé dans data.json
-            cameraElement.textContent = data.cam01;
+            if (cameraElement) {
+                cameraElement.textContent = data.cam01;
+            }
         });
 
-
-    // Ce message s'affichera AVANT "Données reçues"
     console.log('Fin du script principal (Le fetch est parti, mais pas encore revenu)');
 });
-
-
+// ...existing code...
