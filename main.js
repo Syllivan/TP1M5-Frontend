@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
    
     console.log('Le DOM est prêt. Lancement du fetch...');
 
-    fetch('./data.json')
+    fetch('http://127.0.0.1:8000/api/status')
         .then(response => response.json())
         .then(data => {
             console.log('Données reçues :', data);
@@ -26,6 +26,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const cameraElement = document.getElementById('statut-camera-1');
             if (cameraElement) {
                 cameraElement.textContent = data.cam01;
+            }
+
+            // MISE À JOUR DU PARE-FEU (FW-01)
+            const pareFeuElement = document.getElementById('statut-pare-feu');
+            const fwStatus = String(data.fw01 || '').trim();
+            if (pareFeuElement) {
+                pareFeuElement.textContent = fwStatus;
+                // Texte vert si 'En Ligne', rouge sinon
+                if (fwStatus === 'En Ligne') {
+                    pareFeuElement.style.color = 'green';
+                } else {
+                    pareFeuElement.style.color = 'red';
+                }
             }
         });
 
